@@ -24,6 +24,102 @@ let phrasesObj = phrases.map( phrase => {
 let missed = 0;   // number of hearts the player has missed
 let isWin = false;
 
+/*
+const phrases = [
+    { 
+        en: 'Made of money',
+        ch: '腰缠万贯，极为富有' 
+    },
+    { 
+        en: 'Go to the ends of the earth',
+        ch: '走遍天涯海角' 
+    }, 
+    {
+        en: `Break one's silence`,
+        ch: '打破沉默'
+    },
+    {
+        en: 'Make or break',
+        ch: '成败在此一举'
+    },
+    {
+        en: `Break one's routine`,
+        ch: '打破常规'
+    }, 
+    {
+        en: 'Muddy the waters',
+        ch: '把水搅浑'
+    },
+    {
+        en: 'Break the news to someone',
+        ch: '把坏消息告诉某人'
+    },
+    {
+        en: 'Break down barriers',
+        ch: '扫除障碍，消除隔阂'
+    }, 
+    {
+        en: 'Be dead in the water',
+        ch: '无望成功'
+    },
+    {
+        en: 'Build something on sand',
+        ch: '没打好基础；毫无根据'
+    },
+    {
+        en: 'Joking aside',
+        ch: '言归正传'
+    },
+    {
+        en: 'Get into hot water',
+        ch: '陷入困境，遇到麻烦'
+    },
+    {
+        en: 'As busy as a beaver',
+        ch: '忙得不可开交'
+    },
+    {
+        en: 'Be the luck of the draw',
+        ch: '全靠运气'
+    },
+    {
+        en: 'a run of luck',
+        ch: '一连串好运或厄运'
+    },
+    {
+        en: 'Put someone in the picture',
+        ch: '向某人介绍最新情况'
+    }, 
+    {
+        en: 'Rise and shine!',
+        ch: '快起床!'
+    }, 
+    {
+        en: 'Not a cloud in the sky',
+        ch: '万里无云；万事大吉'
+    },
+    {  
+        en: `It's a sight for sore eyes`,
+        ch: '乐于看到的人,事,物'
+    },
+    {
+        en: 'Out of sight, out of mind',
+        ch: '眼不见，心不念'
+    },
+    {
+        en: 'Know someone by sight',
+        ch: '只是面熟，似曾相识'
+    },
+    {
+        en: 'A feast for the eyes',
+        ch: '大饱眼福'
+    },
+    {
+        en: 'In the pipeline',
+        ch: '筹划中，进行中'
+    }
+]*/
+
 const overlay =  document.getElementById('overlay-start');
 const overlay_start =  document.getElementById('overlay-start');
 const overlay_end = document.getElementById('overlay-end');
@@ -66,7 +162,7 @@ function gameReset(model) {
         btn.disabled = false;
     }
     for (let i = 0; i < 5; i++) {
-        hearts[i].src = "images/liveHeart.png";
+        hearts[i].src = "images/liveHeart1.png";
     }
     missed = 0;
     isWin = false;
@@ -85,6 +181,7 @@ function getRandomPhrase(phsObj) {
     const resultObj = phrasesObj.filter( phrase => !phrase.isUsed );
     let randomIndex = Math.floor( Math.random() * resultObj.length );  
     resultObj[randomIndex].isUsed = true;
+    // return phs[randomIndex].toLowerCase().split("");
     return resultObj[randomIndex].content.split("");
 }
 
@@ -105,7 +202,9 @@ function displayPhrase(phrase) {
 // clicking kepboard buttons
 for (btn of keyboard) {
     btn.addEventListener('click', e => {
+        // console.log('click');
         e.target.classList.add('chosen');
+        //e.target.className += "chosen";
         e.target.disabled = true;
 
         let letterFound = checkLetter(e.target);
@@ -114,6 +213,7 @@ for (btn of keyboard) {
             missed += 1;
         } else {
             e.target.classList.add('correct');
+            // e.target.className += " correct";
         }
         checkWin();
     });
@@ -127,6 +227,7 @@ function checkLetter(btn) {
     let result = null;
     for (letter of letter_arr) {     //因为letter_arr是一个HTMLCollection，不同于Array，不能用forEach
         if (letter.textContent.toLowerCase() === btn.textContent) {
+            // letter.className += ' show';
             letter.classList.add('show');
             result = letter.textContent;
         }
@@ -145,17 +246,22 @@ function checkWin() {
     if (lettersNum === showNum) {
         overlay_end.className = "win";
         overlay_end.style.visibility = 'visible';
-        endHeading.textContent = "Congratulations! You Won!";
-        btn_reset.textContent = "New Game";
+        endHeading.textContent = "Phrase Complete! 🎉🎉";
         btn_restart.textContent = "Restart";
+        btn_reset.classList.remove('hidden');
+        btn_reset.textContent = "Continue";
         isWin = true;
     } 
     else if (missed >= 5) {
         overlay_end.className = "lose";
         overlay_end.style.visibility = 'visible';
-        endHeading.textContent = "Game Over";
-        btn_reset.textContent = "New Game";
+        endHeading.textContent = "You tried all chances :( ";
         btn_restart.textContent = "Try Again";
+        btn_reset.classList.add('hidden');
     }
 }
+
+
+
+
 
